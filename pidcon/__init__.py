@@ -1,2 +1,2 @@
-import pidcon.pidcon
+from .pidcon import PID
 
