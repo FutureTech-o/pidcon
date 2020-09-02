@@ -1,10 +1,9 @@
 from setuptools import setup, find_packages
-import pidcon
 
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
-requirements = ["numpy==1.19.1"]
+requirements = ["Events==0.3"]
 
 setup(
     name="pidcon",
