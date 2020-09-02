@@ -8,7 +8,7 @@ requirements = ["numpy==1.19.1"]
 
 setup(
     name="pidcon",
-    version="0.0.2",
+    version="0.0.3",
     author="Akram Abu Owaimer",
     author_email="Akram.AbuOwaimer@gmail.com",
     description="A package to handle simple PID controller",
