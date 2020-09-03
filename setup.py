@@ -7,7 +7,7 @@ requirements = ["Events==0.3"]
 
 setup(
     name="pidcon",
-    version="0.0.3",
+    version="0.0.4",
     author="Akram Abu Owaimer",
     author_email="Akram.AbuOwaimer@gmail.com",
     description="A package to handle simple PID controller",
