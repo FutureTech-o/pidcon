@@ -1,45 +1,98 @@
 import threading
+import time
 
 from events import Events
 
 
 class PID(Events):
-    def __init__(self, kp, ki, kd, sample_rate, n=1):
-        self.__events__ = "on_new_output"
+    def __init__(self, sample_rate, kp=0.0, ki=0.0, kd=0.0, n=1.0):
+        super().__init__("on_new_output")
 
-        self.__output_timer = threading.Timer(sample_rate, self.calculate_output)
-        self.__output_timer.daemon = True
+        self._output_timer = threading.Timer(sample_rate, self.calculate_output)
+        self._output_timer.daemon = True
 
-        self.__Kp = kp
-        self.__Ki = ki
-        self.__Kd = kd
-        self.__n = n
-        self.__proportional = 0
-        self.__integral = 0
-        self.__derivative = 0
+        self._kp = kp
+        self._ki = ki
+        self._kd = kd
+        self._n = n
+        self._is_enabled = False
+        self._input_error = 0.0
+        self._sample_rate = sample_rate
 
-        self.__sample_rate = sample_rate
-        self.__input_error = 0
-
-        self.__is_enabled = False
-        self.__last_output = 0
-
-        self.__output_timer.start()
+        self._proportional = 0.0
+        self._integral = 0.0
+        self._derivative = 0.0
+        self._last_output = 0.0
+        self._last_time = time.monotonic()
+        self._output_timer.start()
 
     def calculate_output(self):
-        if not self.__is_enabled:
-            output = self.__last_output
+        if not self._is_enabled:
+            output = self._last_output
         else:
-            output = self.n * (self.__proportional + self.__integral + self.__derivative)
+            self._proportional = self._kp * self._input_error
+            output = self._n * (self._proportional + self._integral + self._derivative)
 
         self.on_new_output(output)
-        self.__last_output = output
-        self.__output_timer = threading.Timer(self.__sample_rate, self.calculate_output)
-        self.__output_timer.daemon = True
-        self.__output_timer.start()
+        self._last_output = output
+        self._output_timer = threading.Timer(self._sample_rate, self.calculate_output)
+        self._output_timer.daemon = True
+        self._output_timer.start()
+
+    @property
+    def is_enabled(self):
+        return self._is_enabled
 
     def enable_pid(self):
-        self.__is_enabled = True
+        self._is_enabled = True
 
     def disable_pid(self):
-        self.__is_enabled = False
+        self._is_enabled = False
+
+    @property
+    def kp(self):
+        return self._kp
+
+    @kp.setter
+    def kp(self, value):
+        self._kp = float(value)
+
+    @property
+    def ki(self):
+        return self._ki
+
+    @ki.setter
+    def ki(self, value):
+        self._ki = float(value)
+
+    @property
+    def kd(self):
+        return self._kd
+
+    @kd.setter
+    def kd(self, value):
+        self._kd = float(value)
+
+    @property
+    def n(self):
+        return self._n
+
+    @n.setter
+    def n(self, value):
+        self._n = float(value)
+
+    @property
+    def input_error(self):
+        return self._input_error
+
+    @input_error.setter
+    def input_error(self, value):
+        self._input_error = value
+
+    @property
+    def sample_rate(self):
+        return self._sample_rate
+
+    @sample_rate.setter
+    def sample_rate(self, value):
+        self._sample_rate = value

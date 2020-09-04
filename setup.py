@@ -7,7 +7,7 @@ requirements = ["Events==0.3"]
 
 setup(
     name="pidcon",
-    version="0.0.4",
+    version="0.0.5",
     author="Akram Abu Owaimer",
     author_email="Akram.AbuOwaimer@gmail.com",
     description="A package to handle simple PID controller",
@@ -16,6 +16,7 @@ setup(
     url="https://github.com/FutureTech-o/pidcon",
     packages=find_packages(),
     install_requires=requirements,
+    python_requires='>3.3',
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
